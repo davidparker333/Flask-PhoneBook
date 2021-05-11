@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-sm-2 col-md-4"></div>
+    <div class="col-12 col-sm-8 col-md-4 my-5">
+
+        <h1 class="my-4">Register Here</h1>
+
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-group d-flex flex-column justify-content-center">
+                <fieldset class="my-2">
+                    {{ form.name.label }}
+                    {{ form.name(class='form-control', placeholder='Name') }}
+                </fieldset>
+                <fieldset class="my-2">
+                    {{ form.phone_number.label }}
+                    {{ form.phone_number(class='form-control', placeholder='Phone Number') }}
+                </fieldset>
+                {{ form.submit(class='btn btn-success my-3') }}
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-sm-2 col-md-4"></div>
+</div>
+
+{% endblock content %}
