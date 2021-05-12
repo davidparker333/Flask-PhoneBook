@@ -2,6 +2,7 @@
     width: 100%;
     height: 85vh;
     background-image: url('../images/phone.jpg');
+    max-height: 900px;
 }
 
 .banner-text {
