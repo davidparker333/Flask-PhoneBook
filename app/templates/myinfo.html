@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-sm-2 col-md-4"></div>
+    <div class="col-12 col-sm-8 col-md-4 my-5 justify-content-center align-items-center">
+
+        <h1 class="my-4">Your Info</h1>
+
+        <ul class="list-group">
+            <li class="list-group-item">Your name: {{ user.name }}</li>
+            <li class="list-group-item">Your username: {{ user.username }}</li>
+            <li class="list-group-item">Your email: {{ user.email }}</li>
+            <li class="list-group-item">Your phone number: {{ user.phone_number }}</li>
+            <a href="/update/{{ user.id }}"><button type="button" class="btn btn-primary btn-sm my-2" style="width:100%;">Update</button></a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Delete Account
+            </button>
+  
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Are you sure?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+             Your account will be permanently deleted and cannot be recovered.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <form action="" method="POST">
+            <a href="/delete/{{ user.id }}"><button type="button" class="btn btn-danger">Confirm Delete</button></a>
+            </div>
+            </div>
+            </div>
+            </div>
+          </ul>
+        
+
+    </div>
+    <div class="col-12 col-sm-2 col-md-4"></div>
+</div>
+
+{% endblock content %}

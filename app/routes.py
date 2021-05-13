@@ -1,6 +1,6 @@
 import re
 from app.models import User
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm, UpdateInfoForm
 from app import app, db, mail
 from flask_mail import Message
 from flask_login import login_user, logout_user, login_required, current_user
@@ -68,4 +68,56 @@ def login():
 def logout():
     logout_user();
     flash("You've been logged out", 'warning')
+    return redirect(url_for('index'))
+
+@app.route('/myinfo')
+@login_required
+def my_info():
+    title = "My Info"
+    user = User.query.filter_by(id=current_user.id).first()
+
+    return render_template('myinfo.html', title=title, user=user)
+
+@app.route('/update/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def update_info(user_id):
+    user = User.query.get_or_404(user_id)
+    title = f"Update {user.name}'s Info"
+    if user.id != current_user.id:
+        flash("You cannot alter another user's information", 'warning')
+        return redirect(url_for('my_info'))
+
+    update_form = UpdateInfoForm()
+    if request.method == 'POST' and update_form.validate_on_submit():
+        new_email = update_form.email.data
+        new_phone_number = update_form.phone_number.data
+
+        if User.query.filter((User.phone_number == new_phone_number) | (User.email == new_email)).all():
+            flash("That phone number or email is already in use! Try again", 'warning')
+            return redirect(url_for('my_info'))
+
+        user.email = new_email
+        user.phone_number = new_phone_number
+
+        db.session.commit()
+
+        flash("Your info has successfully been updated", 'success')
+
+        return redirect(url_for('my_info'))
+    
+    return render_template('update_info.html', title=title, user=user, form=update_form)
+
+@app.route('/delete/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def delete(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.id != current_user.id:
+        flash("You cannot delete someone else's account!", 'warning')
+        return redirect(url_for('index'))
+    
+    db.session.delete(user)
+    db.session.commit()
+
+    flash('Your account has been deleted', 'success')
+
     return redirect(url_for('index'))
